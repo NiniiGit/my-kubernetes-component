@@ -7,5 +7,5 @@ metadata:
   name: my-kubernetes-component
 spec:
   lifecycle: production
-  owner: NiniiGit
+  owner: my-team
   type: service
