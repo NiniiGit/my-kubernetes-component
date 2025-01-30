@@ -1,12 +1,25 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
+  name: nginx-service
+  description: Nginx Deployment
   annotations:
-    backstage.io/kubernetes-id: my-kubernetes-component
-    backstage.io/techdocs-ref: my-kubernetes-component
-    backstage.io/kubernetes-label-selector: 'app=rancher'
-  name: my-kubernetes-component
+    backstage.io/kubernetes-id: nginx-deployment # Matches the label in your Kubernetes deployment
+    backstage.io/kubernetes-namespace: default
+    backstage.io/kubernetes-label-selector: 'app=nginx'
 spec:
-  lifecycle: production
-  owner: my-team
   type: service
+  owner: team@example.com
+  
+# apiVersion: backstage.io/v1alpha1
+# kind: Component
+# metadata:
+#   annotations:
+#     backstage.io/kubernetes-id: my-kubernetes-component
+#     backstage.io/techdocs-ref: my-kubernetes-component
+#     backstage.io/kubernetes-label-selector: 'app=rancher'
+#   name: my-kubernetes-component
+# spec:
+#   lifecycle: production
+#   owner: my-team
+#   type: service
