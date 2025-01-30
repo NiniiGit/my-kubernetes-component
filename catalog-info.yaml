@@ -8,6 +8,7 @@ metadata:
     backstage.io/kubernetes-namespace: default
     backstage.io/kubernetes-label-selector: 'app=nginx'
 spec:
+  lifecycle: production
   type: service
   owner: team@example.com
   
