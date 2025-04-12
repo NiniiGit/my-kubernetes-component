@@ -7,6 +7,7 @@ metadata:
     backstage.io/kubernetes-id: nginx-deployment # Matches the label in your Kubernetes deployment
     backstage.io/kubernetes-namespace: default
     backstage.io/kubernetes-label-selector: 'app=nginx'
+    backstage.io/techdocs-ref: dir:.
 spec:
   lifecycle: production
   type: service
