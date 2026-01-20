@@ -1,0 +1,59 @@
+name: Scorecard Check
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  scorecard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install pyyaml
+
+      # Pin to tag instead of main (important)
+      - name: Checkout platform standards (pinned)
+        uses: actions/checkout@v4
+        with:
+          repository: NiniiGit/platform-standards
+          ref: v0.1.1
+          path: platform-standards
+          token: ${{ secrets.PLATFORM_STANDARDS_PAT }}
+
+      - name: Copy scorecard spec + evaluator
+        run: |
+          cp platform-standards/standards/scorecard.yaml scorecard.yaml
+          cp platform-standards/scripts/scorecard_eval.py scorecard_eval.py
+          chmod +x scorecard_eval.py
+
+      - name: Evaluate (informational)
+        run: |
+          ./scorecard_eval.py . --scorecard scorecard.yaml --mode informational --json-out scorecard-result.json | tee scorecard-output.txt
+
+      - name: Scorecard Summary
+        if: always()
+        run: |
+          echo "## Scorecard Results" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo '```text' >> "$GITHUB_STEP_SUMMARY"
+          cat scorecard-output.txt >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload scorecard result
+        uses: actions/upload-artifact@v4
+        with:
+          name: scorecard-result
+          path: |
+            scorecard-result.json
+            scorecard-output.txt
